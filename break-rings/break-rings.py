@@ -30,25 +30,25 @@ def break_rings(rings):
     connections = filling(rings)
 
     initial_number = len(connections)
-    max_neighbourhood = 1
+    min_neighbourhood = 1
     print(connections)
-    while max_neighbourhood>0:
+    while min_neighbourhood>0:
 
-        max_neighbourhood = 0
+        min_neighbourhood = 0
         neighbourhood = []
 
         for connection in connections:
-            if len(connections[connection])>max_neighbourhood:
-                max_neighbourhood = len(connections[connection])
-                neighbourhood = set(connections[connection])
+            if len(connections[connection])!=0: min_neighbourhood = len(connections[connection])
+            for connection in connections:
+                if 0<len(connections[connection])<=min_neighbourhood:
+                    min_neighbourhood = len(connections[connection])
+                    neighbourhood = set(connections[connection])
 
-        print('Max_neigbourhood: ',max_neighbourhood)
-        print('And this neighbourhood is',neighbourhood)
         for connection in connections:
             for neighbour in neighbourhood:
                 if neighbour in connections[connection]: connections[connection].remove(neighbour)
 
-        if max_neighbourhood !=0:
+        if min_neighbourhood !=0:
             for neighbour in neighbourhood:
                 connections.pop(neighbour)
 
@@ -58,6 +58,7 @@ def break_rings(rings):
     print('Broken:', diff)
 
     return diff
+
 
 
 break_rings(({8,7},{1,9},{2,7},{3,6},{1,7},{5,7},{3,4},{9,5},{9,6},{3,5},))
