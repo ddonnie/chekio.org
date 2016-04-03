@@ -22,7 +22,7 @@ def filling(rings):
         connections[connection] = list(set(connections[connection]))
         if connection in connections[connection]: connections[connection].remove(connection)
 
-
+    print('Filled',connections)
     return connections
 
 def break_rings(rings):
@@ -30,22 +30,29 @@ def break_rings(rings):
     connections = filling(rings)
 
     initial_number = len(connections)
-    max_connection_number = 1
-    while max_connection_number>0:
+    max_neighbourhood = 1
+    print(connections)
+    while max_neighbourhood>0:
 
-        max_connection_number = 0
-        max_connection_ring = 0
-
-        for connection in connections:
-            if len(connections[connection])>max_connection_number:
-                max_connection_number = len(connections[connection])
-                max_connection_ring = connection
+        max_neighbourhood = 0
+        neighbourhood = []
 
         for connection in connections:
-            if max_connection_ring in connections[connection]: connections[connection].remove(max_connection_ring)
+            if len(connections[connection])>max_neighbourhood:
+                max_neighbourhood = len(connections[connection])
+                neighbourhood = set(connections[connection])
 
-        if max_connection_ring !=0:
-            connections.pop(max_connection_ring)
+        print('Max_neigbourhood: ',max_neighbourhood)
+        print('And this neighbourhood is',neighbourhood)
+        for connection in connections:
+            for neighbour in neighbourhood:
+                if neighbour in connections[connection]: connections[connection].remove(neighbour)
+
+        if max_neighbourhood !=0:
+            for neighbour in neighbourhood:
+                connections.pop(neighbour)
+
+        print(connections)
 
     diff = initial_number - len(connections)
     print('Broken:', diff)
