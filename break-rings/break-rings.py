@@ -22,16 +22,14 @@ def filling(rings):
         connections[connection] = list(set(connections[connection]))
         if connection in connections[connection]: connections[connection].remove(connection)
 
-    print('Filled',connections)
     return connections
 
-def break_rings(rings):
+def break_rings_min_neigbourhood(rings):
 
     connections = filling(rings)
 
     initial_number = len(connections)
     min_neighbourhood = 1
-    print(connections)
     while min_neighbourhood>0:
 
         min_neighbourhood = 0
@@ -52,14 +50,41 @@ def break_rings(rings):
             for neighbour in neighbourhood:
                 connections.pop(neighbour)
 
-        print(connections)
 
     diff = initial_number - len(connections)
     print('Broken:', diff)
 
     return diff
 
+def break_rings_max_connection(rings):
 
+    connections = filling(rings)
+
+    initial_number = len(connections)
+    max_connection_number = 1
+    while max_connection_number>0:
+
+        max_connection_number = 0
+        max_connection_ring = 0
+
+        for connection in connections:
+            if len(connections[connection])>max_connection_number:
+                max_connection_number = len(connections[connection])
+                max_connection_ring = connection
+
+        for connection in connections:
+            if max_connection_ring in connections[connection]: connections[connection].remove(max_connection_ring)
+
+        if max_connection_ring !=0:
+            connections.pop(max_connection_ring)
+
+    diff = initial_number - len(connections)
+    print('Broken:', diff)
+
+    return diff
+
+def break_rings(rings):
+    return min(break_rings_min_neigbourhood(rings),break_rings_max_connection(rings))
 
 break_rings(({8,7},{1,9},{2,7},{3,6},{1,7},{5,7},{3,4},{9,5},{9,6},{3,5},))
 break_rings(({3,4},{1,6},{1,2},{9,5},{2,5},{9,2},{8,3},{2,4},{8,4},{1,3},{8,1},{1,7},{6,7},))
@@ -82,3 +107,4 @@ break_rings(({4,6},{4,12},{2,4},{12,5},{12,14},{12,7},{9,13},{1,10},{9,18},{17,1
 break_rings(({1,2},{2,3},{3,4},{4,5},{5,6},{6,7},{8,7},{8,9},{9,1},))
 break_rings(({1,2},{2,3},{3,4},{4,5},{5,6},{6,7},{8,7},{8,9},{9,7},{10,4},{10,11},{11,12},{12,13},{12,14},))
 break_rings(({1,2},{1,3},{1,5},{2,3},{2,4},{4,6},{5,6},))
+
